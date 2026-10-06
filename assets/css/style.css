@@ -45,7 +45,7 @@ em{font-family:var(--f-serif);font-style:italic;font-weight:400}
 ::selection{background:var(--fuchsia);color:#fff}
 
 .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--px)}
-.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;padding-top:.14em;margin-top:-.14em}
 
 .label{
   display:flex;align-items:center;gap:12px;
@@ -53,6 +53,7 @@ em{font-family:var(--f-serif);font-style:italic;font-weight:400}
   margin-bottom:28px;
 }
 .label span{color:var(--coral);font-family:var(--f-serif);font-style:italic;font-size:16px;letter-spacing:0;text-transform:none}
+.label b{font-weight:inherit}
 .label::after{content:"";flex:0 0 48px;height:1px;background:var(--line-2)}
 
 .h-display{
@@ -157,8 +158,13 @@ em{font-family:var(--f-serif);font-style:italic;font-weight:400}
 .nav__links a:hover,.nav__links a.is-active{color:var(--ink)}
 .nav__links a:hover::after,.nav__links a.is-active::after{transform:scaleX(1);transform-origin:left}
 .nav__right{display:flex;align-items:center;gap:18px}
-.nav__lang{font-size:12px;letter-spacing:.1em;color:var(--ink-mid)}
-.nav__lang i{font-style:normal;color:var(--coral)}
+.lang{display:flex;align-items:center;gap:2px;padding:4px;border:1px solid var(--line);border-radius:999px;font-size:12px;letter-spacing:.1em}
+.lang i{font-style:normal;color:var(--ink-dim);font-size:11px}
+.lang__btn{min-width:38px;height:32px;padding:0 10px;border-radius:999px;color:var(--ink-mid);font-weight:500;letter-spacing:.1em;transition:background .35s,color .35s}
+.lang__btn:hover{color:var(--ink)}
+.lang__btn[aria-pressed="true"]{background:var(--grad);color:#fff}
+main,.footer,.nav__links,.menu__links{transition:opacity .26s ease}
+body.is-switching main,body.is-switching .footer,body.is-switching .nav__links,body.is-switching .menu__links{opacity:0}
 .nav__burger{display:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);position:relative}
 .nav__burger span{position:absolute;left:13px;right:13px;height:1.5px;background:var(--ink);transition:transform .45s var(--ease-out),top .45s var(--ease-out)}
 .nav__burger span:first-child{top:18px}
@@ -223,7 +229,8 @@ em{font-family:var(--f-serif);font-style:italic;font-weight:400}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--grad);box-shadow:0 0 14px var(--fuchsia)}
 .hero__title{font-family:var(--f-display);font-weight:400;text-transform:uppercase;font-size:clamp(60px,min(12.6vw,17.5vh),212px);line-height:.86;letter-spacing:-.01em}
 .hero__title em{text-transform:none;letter-spacing:-.03em;font-size:1.02em;color:var(--ink)}
-.line{display:block;overflow:hidden;padding-bottom:.04em}
+.line{display:block;overflow:hidden;padding:.14em 0 .04em;margin-top:-.14em}
+.line__in.grad{padding-top:0;margin-top:0}
 .line__in{display:inline-block;transform:translateY(105%);transition:transform 1.3s var(--ease-out)}
 .is-ready .line:nth-child(1) .line__in{transform:none;transition-delay:.15s}
 .is-ready .line:nth-child(2) .line__in{transform:none;transition-delay:.27s}
@@ -297,7 +304,7 @@ em{font-family:var(--f-serif);font-style:italic;font-weight:400}
 /* reveal helper */
 [data-reveal]{opacity:0;transform:translateY(40px);transition:opacity 1s var(--ease-out),transform 1.2s var(--ease-out)}
 [data-reveal].is-in{opacity:1;transform:none}
-[data-split] .sl{display:block;overflow:hidden;padding-bottom:.05em}
+[data-split] .sl{display:block;overflow:hidden;padding:.14em 0 .05em;margin-top:-.14em}
 [data-split] .sl > span{display:block;transform:translateY(105%);transition:transform 1.2s var(--ease-out)}
 [data-split].is-in .sl > span{transform:none}
 [data-split].is-in .sl:nth-child(2) > span{transition-delay:.1s}
@@ -559,7 +566,8 @@ em{font-family:var(--f-serif);font-style:italic;font-weight:400}
    Responsive
    ========================================================== */
 @media (max-width:1024px){
-  .nav__links,.nav__lang{display:none}
+  .nav__links{display:none}
+  .nav__right{gap:10px}
   .nav__burger{display:block}
   .about__grid{grid-template-columns:repeat(2,1fr)}
   .stat:nth-child(2){border-right:0}

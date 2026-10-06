@@ -10,78 +10,120 @@
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
   /* ── Content ── */
-  const marqueeA = ['Post-production', 'Motion graphics', 'Color grading', 'Sound design', 'VFX', 'Full production'];
-  const marqueeB = ['agency partner', 'white-label', 'event coverage', 'corporate films', 'bilingual', 'Dallas · Texas'];
+  const I18N = window.I18N || { es: {}, dynamic: {} };
+  const LANGS = ['en', 'es'];
   const clients = ['Microsoft', 'Amazon', 'Google', 'Meta', 'Apple', 'Tesla'];
   const projects = [
-    { title: 'Tech Startup Launch', category: 'Corporate Film', client: 'Fortune 500', year: '2025',
-      src: 'https://images.unsplash.com/photo-1705107958696-a7f73c749ab3?w=1200&q=70' },
-    { title: 'Executive Leadership', category: 'Interview Series', client: 'Enterprise', year: '2025',
-      src: 'https://images.unsplash.com/photo-1628571201562-cf216865f739?w=900&q=70' },
-    { title: 'Annual Conference', category: 'Event Coverage', client: 'Global Brand', year: '2024',
-      src: 'https://images.unsplash.com/photo-1764068866740-506ba4cf64e4?w=1000&q=70' },
-    { title: 'Product Innovation', category: 'Brand Film', client: 'SMB', year: '2024',
-      src: 'https://images.unsplash.com/photo-1704580116048-cff8a7f72d47?w=1100&q=70' },
-    { title: 'Recruitment Campaign', category: 'Employer Branding', client: 'Tech Company', year: '2024',
-      src: 'https://images.unsplash.com/photo-1762028894947-427157955fea?w=1100&q=70' },
-    { title: 'Thought Leadership', category: 'Documentary', client: 'Consultancy', year: '2023',
-      src: 'https://images.unsplash.com/photo-1641671668696-f5061907290f?w=900&q=70' },
+    { year: '2025', src: 'https://images.unsplash.com/photo-1705107958696-a7f73c749ab3?w=1200&q=70' },
+    { year: '2025', src: 'https://images.unsplash.com/photo-1628571201562-cf216865f739?w=900&q=70' },
+    { year: '2024', src: 'https://images.unsplash.com/photo-1764068866740-506ba4cf64e4?w=1000&q=70' },
+    { year: '2024', src: 'https://images.unsplash.com/photo-1704580116048-cff8a7f72d47?w=1100&q=70' },
+    { year: '2024', src: 'https://images.unsplash.com/photo-1762028894947-427157955fea?w=1100&q=70' },
+    { year: '2023', src: 'https://images.unsplash.com/photo-1641671668696-f5061907290f?w=900&q=70' },
   ];
 
-  /* ── Build dynamic markup ── */
+  /* Remember the English markup so we can switch back and forth */
+  const i18nEls = $$('[data-i18n]');
+  const ariaEls = $$('[data-i18n-aria]');
+  i18nEls.forEach((el) => { el._en = el.innerHTML; });
+  ariaEls.forEach((el) => { el._en = el.getAttribute('aria-label'); });
+  const meta = { title: document.title, desc: $('meta[name="description"]') };
+  meta.descEn = meta.desc.content;
+
+  let lang = 'en';
+  let T = I18N.dynamic.en;
+  let words = [];
+  const statement = $('#statement');
+  let booted = false;
+
+  const pickLang = () => {
+    const q = new URLSearchParams(location.search).get('lang');
+    if (LANGS.includes(q)) return q;
+    try { const saved = localStorage.getItem('tata-lang'); if (LANGS.includes(saved)) return saved; } catch (_) {}
+    return (navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en';
+  };
+
   const marqueeHTML = (items) =>
     items.map((t) => `<span class="marquee__item"><span>${t}</span><i class="star"></i></span>`).join('');
-  ['marqueeA', 'marqueeB'].forEach((id, i) => {
-    const el = document.getElementById(id);
-    const html = marqueeHTML(i ? marqueeB : marqueeA);
-    el.innerHTML = html + html + html;
-  });
-  $('#logosTrack').innerHTML = [...clients, ...clients, ...clients, ...clients].map((c) => `<span>${c}</span>`).join('');
-  $('#workGrid').innerHTML = projects.map((p) => `
-    <a class="project" href="#contact" data-cursor="View" data-reveal>
+
+  function buildDynamic() {
+    ['marqueeA', 'marqueeB'].forEach((id) => {
+      const html = marqueeHTML(T[id]);
+      document.getElementById(id).innerHTML = html + html + html;
+    });
+
+    $('#workGrid').innerHTML = projects.map((p, i) => {
+      const [title, category, client] = T.projects[i];
+      return `
+    <a class="project${booted ? ' is-in' : ''}" href="#contact" data-cursor="View" data-reveal>
       <div class="project__media">
-        <span class="project__badge">${p.client}</span>
-        <img src="${p.src}" alt="${p.title}" loading="lazy" onerror="this.remove()">
+        <span class="project__badge">${client}</span>
+        <img src="${p.src}" alt="${title}" loading="lazy" onerror="this.remove()">
       </div>
       <div class="project__meta">
-        <h3 class="project__title">${p.title}</h3>
-        <span class="project__cat">${p.category} · <em>${p.year}</em></span>
+        <h3 class="project__title">${title}</h3>
+        <span class="project__cat">${category} · <em>${p.year}</em></span>
       </div>
-    </a>`).join('');
+    </a>`;
+    }).join('');
+
+    /* Split the about statement into words for scroll-scrubbed reveal */
+    const highlight = new Set(T.highlight);
+    statement.innerHTML = statement.textContent.trim().split(/\s+/)
+      .map((w) => `<span class="w${highlight.has(w.toLowerCase()) ? ' hl' : ''}">${w}</span>`).join(' ');
+    words = $$('.w', statement);
+
+    /* Split display headings into masked lines (split on <br>) */
+    $$('[data-split]').forEach((el) => {
+      el.innerHTML = el.innerHTML.split(/<br\s*\/?>/i).map((l) => `<span class="sl"><span>${l.trim()}</span></span>`).join('');
+    });
+
+    /* Wrap testimonial words for the blur-in effect */
+    $$('.quote blockquote').forEach((q) => {
+      let i = 0;
+      const wrap = (node) => {
+        [...node.childNodes].forEach((n) => {
+          if (n.nodeType === 3) {
+            const frag = document.createDocumentFragment();
+            n.textContent.split(/(\s+)/).forEach((part) => {
+              if (!part) return;
+              if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+              const s = document.createElement('span');
+              s.className = 'qw'; s.textContent = part; s.style.transitionDelay = `${(i++) * 0.025}s`;
+              frag.appendChild(s);
+            });
+            n.replaceWith(frag);
+          } else if (n.nodeType === 1) wrap(n);
+        });
+      };
+      wrap(q);
+    });
+  }
+
+  function applyLang(next) {
+    lang = LANGS.includes(next) ? next : 'en';
+    T = I18N.dynamic[lang] || I18N.dynamic.en;
+    const dict = lang === 'en' ? null : I18N[lang] || {};
+    i18nEls.forEach((el) => {
+      const v = dict && dict[el.dataset.i18n];
+      el.innerHTML = v != null ? v : el._en;
+    });
+    ariaEls.forEach((el) => {
+      const v = dict && dict[el.dataset.i18nAria];
+      el.setAttribute('aria-label', v != null ? v : el._en);
+    });
+    document.documentElement.lang = lang;
+    document.title = (dict && dict['meta.title']) || meta.title;
+    meta.desc.content = (dict && dict['meta.desc']) || meta.descEn;
+    $$('.lang__btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    buildDynamic();
+    if (booted) refreshLangUI();
+    try { localStorage.setItem('tata-lang', lang); } catch (_) {}
+  }
+
+  applyLang(pickLang());
+  $('#logosTrack').innerHTML = [...clients, ...clients, ...clients, ...clients].map((c) => `<span>${c}</span>`).join('');
   $('#year').textContent = new Date().getFullYear();
-
-  /* Split the about statement into words for scroll-scrubbed reveal */
-  const statement = $('#statement');
-  const highlight = new Set(['post-production', 'english', 'spanish,', 'world.']);
-  statement.innerHTML = statement.textContent.trim().split(/\s+/)
-    .map((w) => `<span class="w${highlight.has(w.toLowerCase()) ? ' hl' : ''}">${w}</span>`).join(' ');
-  const words = $$('.w', statement);
-
-  /* Split display headings into masked lines (split on <br>) */
-  $$('[data-split]').forEach((el) => {
-    el.innerHTML = el.innerHTML.split(/<br\s*\/?>/i).map((l) => `<span class="sl"><span>${l.trim()}</span></span>`).join('');
-  });
-
-  /* Wrap testimonial words for the blur-in effect */
-  $$('.quote blockquote').forEach((q) => {
-    let i = 0;
-    const wrap = (node) => {
-      [...node.childNodes].forEach((n) => {
-        if (n.nodeType === 3) {
-          const frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach((part) => {
-            if (!part) return;
-            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-            const s = document.createElement('span');
-            s.className = 'qw'; s.textContent = part; s.style.transitionDelay = `${(i++) * 0.025}s`;
-            frag.appendChild(s);
-          });
-          n.replaceWith(frag);
-        } else if (n.nodeType === 1) wrap(n);
-      });
-    };
-    wrap(q);
-  });
 
   /* ── Preloader ── */
   const loaderCount = $('#loaderCount');
@@ -124,12 +166,13 @@
 
   /* ── Sound toggle ── */
   const soundBtn = $('#soundBtn');
+  const setSoundTxt = () => { $('.sound__txt', soundBtn).textContent = heroVideo.muted ? T.soundOff : T.soundOn; };
   soundBtn.addEventListener('click', () => {
     heroVideo.muted = !heroVideo.muted;
     const on = !heroVideo.muted;
     soundBtn.classList.toggle('is-on', on);
     soundBtn.setAttribute('aria-pressed', on);
-    $('.sound__txt', soundBtn).textContent = on ? 'Sound on' : 'Sound off';
+    setSoundTxt();
     if (on) heroVideo.play().catch(() => {});
   });
 
@@ -164,7 +207,7 @@
   const setMenu = (open) => {
     body.classList.toggle('menu-open', open);
     burger.setAttribute('aria-expanded', open);
-    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    burger.setAttribute('aria-label', open ? T.menuClose : T.menuOpen);
     menu.setAttribute('aria-hidden', !open);
   };
   burger.addEventListener('click', () => setMenu(!body.classList.contains('menu-open')));
@@ -255,17 +298,17 @@
   const updateTime = () => {
     try {
       localTime.textContent = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit' }).format(new Date()) + ' CT';
-    } catch (_) { localTime.textContent = 'Central Time'; }
+    } catch (_) { localTime.textContent = T.timeFallback; }
   };
   updateTime(); setInterval(updateTime, 30000);
 
   /* ── Contact form (front-end validation; wire to your backend / Formspree) ── */
   const form = $('#form');
   const rules = {
-    fname: (v) => (v.trim() ? '' : 'Please tell us your name'),
-    femail: (v) => (!v.trim() ? 'Email is required' : /\S+@\S+\.\S+/.test(v) ? '' : 'Enter a valid email'),
-    fphone: (v) => (v.trim() ? '' : 'Phone is required'),
-    fmessage: (v) => (v.trim() ? '' : 'Tell us about your project'),
+    fname: (v) => (v.trim() ? '' : T.err.name),
+    femail: (v) => (!v.trim() ? T.err.email : /\S+@\S+\.\S+/.test(v) ? '' : T.err.emailBad),
+    fphone: (v) => (v.trim() ? '' : T.err.phone),
+    fmessage: (v) => (v.trim() ? '' : T.err.msg),
   };
   const check = (id) => {
     const el = document.getElementById(id);
@@ -284,6 +327,26 @@
     $('#formOk').hidden = false;
   });
 
+  /* ── Language switch ── */
+  function refreshLangUI() {
+    setSoundTxt();
+    burger.setAttribute('aria-label', body.classList.contains('menu-open') ? T.menuClose : T.menuOpen);
+    Object.keys(rules).forEach((id) => {
+      if (document.getElementById(id).closest('.field').classList.contains('has-error')) check(id);
+    });
+    updateTime();
+  }
+  $$('.lang__btn').forEach((btn) => btn.addEventListener('click', () => {
+    if (btn.dataset.lang === lang) return;
+    body.classList.add('is-switching');
+    setTimeout(() => {
+      applyLang(btn.dataset.lang);
+      requestAnimationFrame(() => body.classList.remove('is-switching'));
+    }, reduceMotion ? 0 : 260);
+  }));
+  booted = true;
+  refreshLangUI();
+
   /* ── Custom cursor ── */
   if (finePointer && !reduceMotion) {
     body.classList.add('has-cursor');
@@ -297,7 +360,7 @@
       const hov = e.target.closest('a,button,[data-hover],label');
       cursor.classList.toggle('is-label', !!lab);
       cursor.classList.toggle('is-hover', !lab && !!hov);
-      label.textContent = lab ? lab.dataset.cursor : '';
+      label.textContent = lab ? (T.cursor[lab.dataset.cursor] || lab.dataset.cursor) : '';
     });
     (function loop() {
       cx += (mx - cx) * 0.18; cy += (my - cy) * 0.18;
