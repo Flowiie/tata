@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tata Productions — Production &amp; Post-Production Studio</title>
+<meta name="description" content="Award-winning bilingual production & post-production studio based in Dallas, Texas. Editing, motion graphics, color grading, sound and full production — worldwide." />
+<meta name="theme-color" content="#0b0607" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="is-loading">
+
+<!-- ───────── Preloader ───────── -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <div class="loader__word"><span>T</span><span>A</span><span>T</span><span>A</span></div>
+    <div class="loader__meta">
+      <span>Loading reel</span>
+      <span class="loader__count" id="loaderCount">000</span>
+    </div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+  </div>
+</div>
+
+<!-- Film grain + custom cursor -->
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span class="cursor__label" id="cursorLabel"></span></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<!-- ───────── Navigation ───────── -->
+<header class="nav" id="nav">
+  <a href="#top" class="nav__logo" aria-label="Tata Productions — home">Tata<sup>®</sup></a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#about" data-hover>About</a>
+    <a href="#services" data-hover>Services</a>
+    <a href="#work" data-hover>Work</a>
+    <a href="#process" data-hover>Process</a>
+    <a href="#contact" data-hover>Contact</a>
+  </nav>
+  <div class="nav__right">
+    <span class="nav__lang">EN <i>/</i> ES</span>
+    <a href="#contact" class="btn btn--pill" data-hover><span>Let’s talk</span></a>
+    <button class="nav__burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="menu__bg"></div>
+  <nav class="menu__links">
+    <a href="#about"><i>01</i>About</a>
+    <a href="#services"><i>02</i>Services</a>
+    <a href="#work"><i>03</i>Work</a>
+    <a href="#process"><i>04</i>Process</a>
+    <a href="#contact"><i>05</i>Contact</a>
+  </nav>
+  <div class="menu__foot">
+    <a href="mailto:hi@tataproductions.com">hi@tataproductions.com</a>
+    <span>Dallas, TX — Worldwide</span>
+  </div>
+</div>
+
+<main id="top">
+
+<!-- ───────── 01 · Hero video ───────── -->
+<section class="hero" id="hero" aria-label="Showreel">
+  <div class="hero__media">
+    <!--
+      HERO VIDEO — replace assets/video/hero.mp4 (and hero-poster.jpg) with the final reel.
+      Recommended: 1920×1080, H.264, 10–20s seamless loop, no audio track or muted, < 8 MB.
+    -->
+    <video class="hero__video" id="heroVideo" autoplay muted loop playsinline preload="auto" poster="assets/video/hero-poster.jpg">
+      <source src="assets/video/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero__shade"></div>
+  </div>
+
+  <!-- Camera viewfinder HUD -->
+  <div class="hud" aria-hidden="true">
+    <span class="hud__corner hud__corner--tl"></span><span class="hud__corner hud__corner--tr"></span>
+    <span class="hud__corner hud__corner--bl"></span><span class="hud__corner hud__corner--br"></span>
+    <div class="hud__top">
+      <span class="hud__rec"><b></b>REC</span>
+      <span class="hud__tc" id="timecode">00:00:00:00</span>
+      <span class="hud__spec">4K · 23.976 · ISO 800 · 180°</span>
+    </div>
+    <div class="hud__center"><span></span></div>
+  </div>
+
+  <div class="hero__content">
+    <p class="hero__eyebrow reveal-up"><span class="dot"></span>Production &amp; Post-Production Studio — Dallas, TX</p>
+    <h1 class="hero__title" aria-label="Your vision, cinematically realized">
+      <span class="line"><span class="line__in">Your vision,</span></span>
+      <span class="line"><span class="line__in"><em>cinematically</em></span></span>
+      <span class="line"><span class="line__in grad">realized.</span></span>
+    </h1>
+    <div class="hero__bottom">
+      <p class="hero__lead reveal-up">Bilingual studio crafting films, motion and color for agencies, brands and productions — worldwide.</p>
+      <button class="reel-btn" id="reelBtn" data-cursor="Play" aria-label="Play showreel">
+        <svg viewBox="0 0 200 200" class="reel-btn__ring" aria-hidden="true">
+          <defs><path id="circ" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+          <text><textPath href="#circ">PLAY SHOWREEL ✦ 2026 ✦ PLAY SHOWREEL ✦ 2026 ✦</textPath></text>
+        </svg>
+        <span class="reel-btn__icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="hero__aside">
+    <button class="sound" id="soundBtn" aria-pressed="false" aria-label="Toggle sound">
+      <span class="sound__bars"><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="sound__txt">Sound off</span>
+    </button>
+    <a href="#about" class="scroll-cue" aria-label="Scroll down"><span>Scroll</span><i></i></a>
+  </div>
+</section>
+
+<!-- ───────── Marquee ───────── -->
+<section class="marquee" aria-label="What we do">
+  <div class="marquee__row" data-speed="1">
+    <div class="marquee__track" id="marqueeA"></div>
+  </div>
+  <div class="marquee__row marquee__row--alt" data-speed="-1">
+    <div class="marquee__track" id="marqueeB"></div>
+  </div>
+</section>
+
+<!-- ───────── About ───────── -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="label"><span>(01)</span> About the studio</div>
+    <p class="about__statement" id="statement">
+      Tata Productions is a boutique studio in Dallas, Texas. Our core is post-production — editing, motion graphics, color and sound — backed by full production for clients who want everything under one roof. Eighteen years of stories, told in English and Spanish, for the whole world.
+    </p>
+    <div class="about__grid">
+      <div class="stat" data-reveal>
+        <div class="stat__num"><span data-count="18">0</span><sup>+</sup></div>
+        <div class="stat__lbl">Years crafting stories</div>
+      </div>
+      <div class="stat" data-reveal>
+        <div class="stat__num"><span data-count="6">0</span><sup>×</sup></div>
+        <div class="stat__lbl">Telly Awards 2025</div>
+      </div>
+      <div class="stat" data-reveal>
+        <div class="stat__num"><span data-count="2">0</span><sup>×</sup></div>
+        <div class="stat__lbl">Emmy nominations</div>
+      </div>
+      <div class="stat" data-reveal>
+        <div class="stat__num">EN<em>/</em>ES</div>
+        <div class="stat__lbl">Bilingual studio</div>
+      </div>
+    </div>
+    <div class="about__pillars">
+      <div class="pillar" data-reveal><i>↳</i><h3>Dallas-based</h3><p>Boutique studio rooted in Texas, delivering worldwide.</p></div>
+      <div class="pillar" data-reveal><i>↳</i><h3>Senior-level team</h3><p>A compact crew designed for precision and execution.</p></div>
+      <div class="pillar" data-reveal><i>↳</i><h3>Post-production first</h3><p>Editing, motion graphics and color grading are our core.</p></div>
+      <div class="pillar" data-reveal><i>↳</i><h3>EN / ES</h3><p>Fluent in US and Latin American markets.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── Expanding showreel ───────── -->
+<section class="reel" id="reel" aria-label="Showreel">
+  <div class="reel__sticky">
+    <div class="reel__frame" id="reelFrame" data-cursor="Play">
+      <video class="reel__video" muted loop playsinline preload="metadata" poster="assets/video/hero-poster.jpg">
+        <source src="assets/video/hero.mp4" type="video/mp4">
+      </video>
+      <div class="reel__shade"></div>
+      <div class="reel__caption">
+        <span>Showreel</span>
+        <strong>2026</strong>
+      </div>
+    </div>
+    <h2 class="reel__title" aria-hidden="true"><span>Every frame</span><span><em>with intent</em></span></h2>
+  </div>
+</section>
+
+<!-- ───────── Services ───────── -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="label"><span>(02)</span> Services</div>
+      <h2 class="h-display" data-split>Post-production is<br><em>our core</em> strength</h2>
+      <p class="section-head__lead" data-reveal>We adapt to your needs — post-production partner, full crew, or everything in between. Available in English and Spanish, worldwide.</p>
+    </div>
+
+    <ul class="svc-list" id="svcList">
+      <li class="svc" data-img="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=900&q=70">
+        <button class="svc__row" aria-expanded="false">
+          <span class="svc__num">01</span>
+          <span class="svc__name">Editing &amp; Color</span>
+          <span class="svc__tags">Brand films · Docs · Social</span>
+          <span class="svc__plus" aria-hidden="true"></span>
+        </button>
+        <div class="svc__body"><div>
+          <p>From rough cut to final deliverable — cinematic editing with professional color grading included.</p>
+          <ul><li>Corporate &amp; brand films</li><li>Multi-cam event edits</li><li>Interview &amp; documentary cuts</li><li>Short-form &amp; social edits</li></ul>
+        </div></div>
+      </li>
+      <li class="svc" data-img="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=900&q=70">
+        <button class="svc__row" aria-expanded="false">
+          <span class="svc__num">02</span>
+          <span class="svc__name">Motion Graphics</span>
+          <span class="svc__tags">Titles · Broadcast · Brand</span>
+          <span class="svc__plus" aria-hidden="true"></span>
+        </button>
+        <div class="svc__body"><div>
+          <p>Animated visuals, title sequences, lower thirds, transitions and full broadcast packages.</p>
+          <ul><li>Event &amp; live broadcast graphics</li><li>Brand animations</li><li>Logo reveals &amp; intros</li><li>Social media motion content</li></ul>
+        </div></div>
+      </li>
+      <li class="svc" data-img="https://images.unsplash.com/photo-1536240478700-b869070f9279?w=900&q=70">
+        <button class="svc__row" aria-expanded="false">
+          <span class="svc__num">03</span>
+          <span class="svc__name">VFX &amp; Compositing</span>
+          <span class="svc__tags">Green screen · Integration</span>
+          <span class="svc__plus" aria-hidden="true"></span>
+        </button>
+        <div class="svc__body"><div>
+          <p>Visual effects, green screen compositing and advanced post work.</p>
+          <ul><li>VFX integration</li><li>Green screen keying</li><li>Titles &amp; text animation</li></ul>
+        </div></div>
+      </li>
+      <li class="svc" data-img="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=900&q=70">
+        <button class="svc__row" aria-expanded="false">
+          <span class="svc__num">04</span>
+          <span class="svc__name">Audio Post</span>
+          <span class="svc__tags">Mix · Sound design · Music</span>
+          <span class="svc__plus" aria-hidden="true"></span>
+        </button>
+        <div class="svc__body"><div>
+          <p>Sound design, mixing and music sync for any type of content.</p>
+          <ul><li>Dialogue cleanup</li><li>Sound design &amp; SFX</li><li>Music licensing</li></ul>
+        </div></div>
+      </li>
+      <li class="svc" data-img="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=900&q=70">
+        <button class="svc__row" aria-expanded="false">
+          <span class="svc__num">05</span>
+          <span class="svc__name">Full Production</span>
+          <span class="svc__tags">Concept → Delivery</span>
+          <span class="svc__plus" aria-hidden="true"></span>
+        </button>
+        <div class="svc__body"><div>
+          <p>End-to-end: concept, scripting, crew, shoot, edit, color, sound, delivery. One team, one point of contact.</p>
+          <ul><li>Pre-production &amp; creative direction</li><li>Content series &amp; campaigns</li><li>Live events &amp; conferences</li><li>Corporate films &amp; testimonials</li></ul>
+        </div></div>
+      </li>
+      <li class="svc" data-img="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=900&q=70">
+        <button class="svc__row" aria-expanded="false">
+          <span class="svc__num">06</span>
+          <span class="svc__name">Delivery &amp; Versions</span>
+          <span class="svc__tags">Broadcast · Web · Subtitles</span>
+          <span class="svc__plus" aria-hidden="true"></span>
+        </button>
+        <div class="svc__body"><div>
+          <p>All formats, all platforms — broadcast-ready, web-optimized, social-ready. Plus quick turnaround for light edits and revisions.</p>
+          <ul><li>Broadcast &amp; streaming</li><li>Web &amp; social formats</li><li>Subtitles &amp; captioning</li><li>Fast version updates</li></ul>
+        </div></div>
+      </li>
+    </ul>
+
+    <div class="partners">
+      <article class="partner" data-reveal>
+        <span class="partner__tag">Most common</span>
+        <h3>Agencies</h3>
+        <p>Your white-label production arm. We fit your workflow, meet your deadlines and deliver under your brand.</p>
+        <div class="chips"><span>White-label</span><span>Recurring</span><span>Flexible scope</span></div>
+      </article>
+      <article class="partner" data-reveal>
+        <span class="partner__tag">Any size</span>
+        <h3>Companies</h3>
+        <p>From startups to Fortune 500s — we adapt to your needs, your budget and your internal team.</p>
+        <div class="chips"><span>Monthly retainer</span><span>Per project</span></div>
+      </article>
+      <article class="partner" data-reveal>
+        <span class="partner__tag">Dallas–Fort Worth</span>
+        <h3>Crews</h3>
+        <p>Traveling production? Hire us for a day or the full shoot — camera, direction, lighting, audio and post.</p>
+        <div class="chips"><span>Local crew</span><span>Day rates</span><span>Remote post</span></div>
+      </article>
+    </div>
+  </div>
+  <div class="svc-preview" id="svcPreview" aria-hidden="true"><img alt=""></div>
+</section>
+
+<!-- ───────── Work ───────── -->
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="section-head section-head--row">
+      <div>
+        <div class="label"><span>(03)</span> Selected work</div>
+        <h2 class="h-display" data-split>Stories that<br><em>resonate</em></h2>
+      </div>
+      <p class="section-head__lead" data-reveal>Every frame crafted with precision. Every story told with impact.</p>
+    </div>
+    <div class="work__grid" id="workGrid"></div>
+    <div class="work__more" data-reveal>
+      <a href="#contact" class="btn btn--ghost" data-hover><span>View full portfolio</span><i>→</i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── Process (horizontal) ───────── -->
+<section class="process" id="process">
+  <div class="process__sticky">
+    <div class="process__head wrap">
+      <div class="label"><span>(04)</span> Process</div>
+      <div class="process__progress"><i id="processBar"></i></div>
+    </div>
+    <div class="process__track" id="processTrack">
+      <div class="process__intro">
+        <h2 class="h-display">Built for<br><em>efficiency.</em><br>Driven by<br><span class="grad">deadlines.</span></h2>
+        <p>A structured workflow for clarity and premium results — so you always know where things stand.</p>
+      </div>
+      <article class="step"><span class="step__n">01</span><h3>Discovery</h3><p>We understand your goals, audience and brand — then map a clear plan before anything else begins.</p></article>
+      <article class="step"><span class="step__n">02</span><h3>Creative</h3><p>Concepts, scripts, storyboards and visual direction — aligned with your vision and approved before the shoot.</p></article>
+      <article class="step"><span class="step__n">03</span><h3>Production</h3><p>We execute with precision — crew, equipment, locations and talent, from call time to wrap.</p></article>
+      <article class="step"><span class="step__n">04</span><h3>Post</h3><p>Editing, color, sound design, motion graphics — our core, and where we spend the most care.</p></article>
+      <article class="step"><span class="step__n">05</span><h3>Delivery</h3><p>Final masters optimized for every platform and format. On time, on budget, on brand.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── Awards ───────── -->
+<section class="awards" id="awards">
+  <div class="wrap">
+    <div class="section-head section-head--row">
+      <div>
+        <div class="label"><span>(05)</span> Recognition</div>
+        <h2 class="h-display" data-split>18+ years.<br><em>Award-winning</em> work.</h2>
+      </div>
+    </div>
+    <ul class="award-list">
+      <li class="award" data-reveal><span class="award__qty">6×</span><span class="award__name">Telly Awards</span><span class="award__desc">Excellence in video &amp; television</span><span class="award__year">2025</span></li>
+      <li class="award" data-reveal><span class="award__qty">2×</span><span class="award__name">Emmy Nominated</span><span class="award__desc">National Academy of Television Arts &amp; Sciences</span><span class="award__year">NATAS</span></li>
+      <li class="award" data-reveal><span class="award__qty">3×</span><span class="award__name">Prodc Awards</span><span class="award__desc">Outstanding production achievement</span><span class="award__year">Prodc</span></li>
+      <li class="award" data-reveal><span class="award__qty">1×</span><span class="award__name">Martín Fierro</span><span class="award__desc">Latin American broadcasting award</span><span class="award__year">LATAM</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ───────── Testimonials ───────── -->
+<section class="quotes" id="quotes">
+  <div class="wrap">
+    <div class="label"><span>(06)</span> Kind words</div>
+    <div class="quotes__stage" id="quotesStage">
+      <figure class="quote is-active">
+        <blockquote>“They transformed our corporate message into a <em>cinematic experience.</em> The attention to detail and creative vision exceeded all expectations.”</blockquote>
+        <figcaption><strong>Sarah Chen</strong> — CMO, TechVision Global</figcaption>
+      </figure>
+      <figure class="quote">
+        <blockquote>“Professional, creative and incredibly efficient. Our launch video generated <em>3× more engagement</em> than any previous campaign.”</blockquote>
+        <figcaption><strong>Michael Rodriguez</strong> — VP Brand Strategy, Innovate Industries</figcaption>
+      </figure>
+      <figure class="quote">
+        <blockquote>“Working with Tata felt like having an <em>extension of our own team.</em> They understood our brand DNA and brought it to life.”</blockquote>
+        <figcaption><strong>Jennifer Walsh</strong> — Director of Communications, Enterprise Solutions</figcaption>
+      </figure>
+    </div>
+    <div class="quotes__nav">
+      <button class="qbtn" id="qPrev" aria-label="Previous testimonial" data-hover>←</button>
+      <span class="quotes__count"><b id="qIdx">01</b> / 03</span>
+      <button class="qbtn" id="qNext" aria-label="Next testimonial" data-hover>→</button>
+    </div>
+  </div>
+  <div class="logos" aria-label="Trusted by">
+    <div class="logos__track" id="logosTrack"></div>
+  </div>
+</section>
+
+<!-- ───────── Contact ───────── -->
+<section class="contact" id="contact">
+  <div class="contact__glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="label"><span>(07)</span> Let’s work together</div>
+    <h2 class="contact__title"><a href="mailto:hi@tataproductions.com" data-cursor="Write">Let’s <em>roll</em><span class="grad">camera.</span></a></h2>
+
+    <div class="contact__grid">
+      <div class="contact__info">
+        <p class="contact__lead">Tell us what you need — we’ll get back to you within 24 hours, in English or Español.</p>
+        <dl>
+          <div><dt>Email</dt><dd><a href="mailto:hi@tataproductions.com" data-hover>hi@tataproductions.com</a></dd></div>
+          <div><dt>Phone</dt><dd><a href="tel:+19454460881" data-hover>+1 (945) 446-0881</a></dd></div>
+          <div><dt>Studio</dt><dd>Dallas, Texas — Worldwide</dd></div>
+          <div><dt>Local time</dt><dd id="localTime">—</dd></div>
+        </dl>
+        <div class="socials">
+          <a href="https://instagram.com" target="_blank" rel="noopener" data-hover>Instagram</a>
+          <a href="https://youtube.com" target="_blank" rel="noopener" data-hover>YouTube</a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener" data-hover>LinkedIn</a>
+        </div>
+      </div>
+
+      <form class="form" id="form" novalidate>
+        <div class="field"><input id="fname" name="name" placeholder=" " autocomplete="name"><label for="fname">Your name *</label><small></small></div>
+        <div class="field"><input id="femail" name="email" type="email" placeholder=" " autocomplete="email"><label for="femail">Email *</label><small></small></div>
+        <div class="field"><input id="fphone" name="phone" type="tel" placeholder=" " autocomplete="tel"><label for="fphone">Phone *</label><small></small></div>
+        <fieldset class="field field--chips">
+          <legend>I’m interested in</legend>
+          <label><input type="checkbox" name="service" value="Post-production"><span>Post-production</span></label>
+          <label><input type="checkbox" name="service" value="Motion graphics"><span>Motion graphics</span></label>
+          <label><input type="checkbox" name="service" value="Color grading"><span>Color grading</span></label>
+          <label><input type="checkbox" name="service" value="Full production"><span>Full production</span></label>
+          <label><input type="checkbox" name="service" value="Event coverage"><span>Event coverage</span></label>
+          <label><input type="checkbox" name="service" value="White-label"><span>Agency / White-label</span></label>
+        </fieldset>
+        <div class="field"><textarea id="fmessage" name="message" rows="4" placeholder=" "></textarea><label for="fmessage">Project details *</label><small></small></div>
+        <button type="submit" class="btn btn--big" data-hover><span>Send message</span><i>→</i></button>
+        <div class="form__ok" id="formOk" role="status" hidden>
+          <strong>Message received.</strong> We’ll review your project and get back to you within 24 hours.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ───────── Footer ───────── -->
+<footer class="footer">
+  <div class="wrap footer__cols">
+    <div>
+      <h4>Services</h4>
+      <a href="#services">Post-production &amp; editing</a><a href="#services">Motion graphics</a><a href="#services">Color grading</a><a href="#services">Event coverage</a><a href="#services">Full production</a>
+    </div>
+    <div>
+      <h4>We partner with</h4>
+      <span>Agencies (white-label)</span><span>Small &amp; medium companies</span><span>Enterprise brands</span><span>Local crew — Dallas/FW</span>
+    </div>
+    <div>
+      <h4>Awards</h4>
+      <span>6× Telly Awards 2025</span><span>2× Emmy Nominated</span><span>3× Prodc Awards</span><span>Martín Fierro</span>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <a href="mailto:hi@tataproductions.com">hi@tataproductions.com</a><a href="tel:+19454460881">+1 (945) 446-0881</a><span>English · Español</span>
+    </div>
+  </div>
+  <div class="footer__word" aria-hidden="true">TATA<span>®</span></div>
+  <div class="wrap footer__base">
+    <span>© <span id="year">2026</span> Tata Productions. All rights reserved.</span>
+    <a href="#top" class="totop" data-hover>Back to top ↑</a>
+  </div>
+</footer>
+
+<!-- ───────── Showreel modal ───────── -->
+<div class="modal" id="modal" aria-hidden="true" role="dialog" aria-label="Showreel">
+  <button class="modal__close" id="modalClose" aria-label="Close showreel" data-cursor="Close">Close <i>✕</i></button>
+  <div class="modal__frame">
+    <!-- SHOWREEL — replace with the final reel file (or swap the <video> for a Vimeo/YouTube iframe). -->
+    <video id="modalVideo" controls playsinline preload="none" poster="assets/video/hero-poster.jpg">
+      <source src="assets/video/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
